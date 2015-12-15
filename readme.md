@@ -17,7 +17,7 @@ On parse error, return black with full opacity
 ## Install
 
 ```bash
-npm i jeromedecoster/rgba-convert
+npm i rgba-convert
 ```
 
 ## API

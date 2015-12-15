@@ -8,6 +8,14 @@
   "files": [
     "index.js"
   ],
+  "keywords": [
+    "rgb",
+    "rgba",
+    "convert",
+    "color",
+    "hex",
+    "css"
+  ],
   "scripts": {
     "start": "onchange {index,test}.js -- npm test",
     "test": "tape test.js | tap-min"
