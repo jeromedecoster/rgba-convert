@@ -326,3 +326,16 @@ test('array', function (t) {
 
   t.end()
 })
+
+test('wrong values', function (t) {
+
+  t.deepEqual(rgba(undefined), ablack)
+  t.deepEqual(rgba(null),      ablack)
+  t.deepEqual(rgba(""),        ablack)
+  t.deepEqual(rgba(12),        ablack)
+  t.deepEqual(rgba(12.3),      ablack)
+  t.deepEqual(rgba(true),      ablack)
+  t.deepEqual(rgba(false),     ablack)
+
+  t.end()
+})

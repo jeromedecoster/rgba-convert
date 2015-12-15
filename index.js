@@ -153,13 +153,9 @@ function has(obj, prop) {
   return obj.hasOwnProperty(prop)
 }
 
-function isobj(obj) {
-  return Object.prototype.toString.call(obj) === '[object Object]'
-    && Object.getPrototypeOf(obj) === Object.getPrototypeOf({})
-}
-
 function object(obj) {
-  if (isobj(obj)) {
+  if (Object.prototype.toString.call(obj) === '[object Object]'
+    && Object.getPrototypeOf(obj) === Object.getPrototypeOf({})) {
     var r = num(has(obj, 'r') ? obj.r : has(obj, 'red')   ? obj.red   : 0,   true)
     var g = num(has(obj, 'g') ? obj.g : has(obj, 'green') ? obj.green : 0,   true)
     var b = num(has(obj, 'b') ? obj.b : has(obj, 'blue')  ? obj.blue  : 0,   true)
@@ -171,7 +167,7 @@ function object(obj) {
 }
 
 function array(arr) {
-  if (Array.isArray(arr) && arr.length == 3 || arr.length == 4) {
+  if (Array.isArray(arr) && (arr.length == 3 || arr.length == 4)) {
     var r = num(arr[0] || 0,   true)
     var g = num(arr[1] || 0,   true)
     var b = num(arr[2] || 0,   true)
