@@ -266,7 +266,7 @@ test('object', function (t) {
   t.end()
 })
 
-test('object', function (t) {
+test('hex', function (t) {
 
   t.deepEqual(rgba.hex('red'),   '#f00')
   t.deepEqual(rgba.hex('green'), '#0f0')
@@ -296,6 +296,33 @@ test('object', function (t) {
   t.deepEqual(rgba.hex('rgb(252.5, 0, 0)'), '#000')
   t.deepEqual(rgba.hex('rgba(255, 0, 0, 1.1)'), '#000')
   t.deepEqual(rgba.hex('rgba(252.5, 0, 0, 1)'), '#000')
+
+  t.end()
+})
+
+test('array', function (t) {
+
+  t.deepEqual(rgba([255, 0, 0]),   ared)
+  t.deepEqual(rgba([0, 255, 0]), agreen)
+  t.deepEqual(rgba([0, 0, 255]),  ablue)
+
+  t.deepEqual(rgba.obj([255, 0, 0]),   ored)
+  t.deepEqual(rgba.obj([0, 255, 0]), ogreen)
+  t.deepEqual(rgba.obj([0, 0, 255]),  oblue)
+
+  t.deepEqual(rgba.hex([255, 0, 0]),   '#f00')
+  t.deepEqual(rgba.hex([0, 255, 0]),   '#0f0')
+  t.deepEqual(rgba.hex([0, 0, 255]),   '#00f')
+  t.deepEqual(rgba.hex([0, 0, 0]),     '#000')
+  t.deepEqual(rgba.hex([0, 0, 0, 255]),'#000')
+
+  t.deepEqual(rgba.css([0, 255, 0, 255]), 'rgb(0, 255, 0)')
+  t.deepEqual(rgba.css([0, 0, 0, 128]),   'rgba(0, 0, 0, .5019607843137255)')
+
+  t.deepEqual(rgba([0, 0, 252.5]), ablack)
+  t.deepEqual(rgba([0, 0, 256]),   ablack)
+  t.deepEqual(rgba([0, 0]),        ablack)
+  t.deepEqual(rgba([0, '255', 0]), ablack)
 
   t.end()
 })

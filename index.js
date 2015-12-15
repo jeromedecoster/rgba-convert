@@ -68,6 +68,7 @@ function parse(data) {
       || [0, 0, 0, 255]
   }
   return object(data)
+    || array(data)
     || [0, 0, 0, 255]
 }
 
@@ -163,6 +164,18 @@ function object(obj) {
     var g = num(has(obj, 'g') ? obj.g : has(obj, 'green') ? obj.green : 0,   true)
     var b = num(has(obj, 'b') ? obj.b : has(obj, 'blue')  ? obj.blue  : 0,   true)
     var a = num(has(obj, 'a') ? obj.a : has(obj, 'alpha') ? obj.alpha : 255, true)
+    if (r != -1 && g != -1 && b != -1 && a != -1) {
+      return [r, g, b, a]
+    }
+  }
+}
+
+function array(arr) {
+  if (Array.isArray(arr) && arr.length == 3 || arr.length == 4) {
+    var r = num(arr[0] || 0,   true)
+    var g = num(arr[1] || 0,   true)
+    var b = num(arr[2] || 0,   true)
+    var a = num(arr[3] || 255, true)
     if (r != -1 && g != -1 && b != -1 && a != -1) {
       return [r, g, b, a]
     }
