@@ -2,7 +2,6 @@
   "name": "rgba-convert",
   "version": "0.1.0",
   "description": "Convert rgba values from and to various format",
-  "readme": "Convert rgba values from and to various format",
   "repository": "jeromedecoster/rgba-convert",
   "main": "index.js",
   "files": [
