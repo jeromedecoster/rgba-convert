@@ -1,0 +1,12 @@
+.DocumentRevisions-V100
+.DS_Store
+.fseventsd
+.Spotlight-V100
+.svn
+.TemporaryItems
+.Trash
+.Trashes
+desktop.ini
+node_modules
+npm-debug.log
+Thumbs.db
