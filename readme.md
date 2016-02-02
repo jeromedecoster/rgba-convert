@@ -10,6 +10,7 @@ Accepted formats
 | **object** | `{r, g, b}` or `{r, g, b, a}` or `{r}` ... |
 | **hex string** | `#rgb` or `#rgba` or `#rrggbb` or `#rrggbbaa` |
 | **css string** | `rgb(r, g, b)` or `rgba(r, g, b, a)` |
+| **integer** | 4294967295 ≥ `integer` ≥ 0 |
 | **css name** | `red` or `green` ... only basic names |
 
 On parse error, return black with full opacity
@@ -60,6 +61,9 @@ rgba('rgb(0, 0, 255)')
 // [0, 0, 255, 128]
 rgba('rgba(0, 0, 255, .5)')
 
+// [0, 0, 255, 0]
+rgba(255)
+
 /*
 on parse error, fallback on black
 [0, 0, 0, 255]
@@ -104,6 +108,9 @@ rgba.obj('rgb(0, 0, 255)')
 
 // {r:0, g:0, b:255, a:128}
 rgba.obj('rgba(0, 0, 255, .5)')
+
+// {r:0, g:0, b:255, a:0}
+rgba.obj(255)
 
 /*
 on parse error, fallback on black
@@ -153,6 +160,9 @@ rgba.css('rgb(0, 0, 255)')
 // 'rgba(0, 0, 255, .5)'
 rgba.css('rgba(0, 0, 255, .5)')
 
+// 'rgba(0, 0, 255, 0)''
+rgba.css(255)
+
 /*
 on parse error, fallback on black
 'rgb(0, 0, 0)'
@@ -201,6 +211,9 @@ rgba.hex('rgb(0, 0, 255)')
 // '#0000ff80'
 rgba.hex('rgba(0, 0, 255, .5)')
 
+// '#00f0'
+rgba.hex(255)
+
 /*
 on parse error, fallback on black
 '#000'
@@ -210,6 +223,57 @@ rgba.hex('#fun')
 rgba.hex({r:256})
 rgba.hex('rgb(256, 0, 0)')
 rgba.hex('rgba(255, 0, 0, 1.1)')
+```
+
+#### rgba.num(data)
+
+Convert as 4294967295 ≥ `integer` ≥ 0 number
+
+```js
+const rgba = require('rgba-convert')
+
+// 4294901760
+rgba.num('red')
+
+// 4294901760
+rgba.num('#f00')
+
+// 1727987712
+rgba.num('#f006')
+
+// 4278255360
+rgba.num('#00ff00')
+
+// 2147548928
+rgba.num('#00ff0080')
+
+// 4294901760
+rgba.num({r:255})
+
+// 2147548928
+rgba.num({green:255, a:128})
+
+// 255
+rgba.num({b:255, a:0})
+
+// 4278190335
+rgba.num('rgb(0, 0, 255)')
+
+// 2147483903
+rgba.num('rgba(0, 0, 255, .5)')
+
+// 255
+rgba.num(255)
+
+/*
+on parse error, fallback on black
+4278190080
+*/
+rgba.num('weird blue')
+rgba.num('#fun')
+rgba.num({r:256})
+rgba.num('rgb(256, 0, 0)')
+rgba.num('rgba(255, 0, 0, 1.1)')
 ```
 
 ## License

@@ -4,6 +4,7 @@ module.exports.arr = arr
 module.exports.obj = obj
 module.exports.css = css
 module.exports.hex = hex
+module.exports.num = num
 
 function arr(data) {
   var a = parse(data)
@@ -32,9 +33,9 @@ function css(data) {
   if (a.length == 3) a.push(255)
 
   return a[3] == 255
-    ? 'rgb('  + a[0] + ', ' + a[1] + ', ' + a[2] + ')'
+    ? 'rgb(' + a[0] + ', ' + a[1] + ', ' + a[2] + ')'
     : a[3] == 0
-      ? 'rgba('  + a[0] + ', ' + a[1] + ', ' + a[2] + ', 0)'
+      ? 'rgba(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', 0)'
       : 'rgba(' + a[0] + ', ' + a[1] + ', ' + a[2] + ', ' + String(a[3] / 255).substr(1) + ')'
 }
 
@@ -57,6 +58,13 @@ function hex(data) {
     : '#' + r + g + b + a
 }
 
+function num(data) {
+  var a = parse(data)
+  if (a.length == 3) a.push(255)
+  else a[3] = Math.round(a[3])
+  return ((a[3] << 24) >>> 0 | a[0] << 16 | a[1] << 8 | a[2]) >>> 0
+}
+
 function parse(data) {
   if (typeof data == 'string') {
     data = data.toLowerCase()
@@ -69,6 +77,7 @@ function parse(data) {
   }
   return object(data)
     || array(data)
+    || number(data)
     || [0, 0, 0, 255]
 }
 
@@ -98,6 +107,8 @@ function name(str) {
   if (str == 'gray')    return [128, 128, 128]
   if (str == 'grey')    return [128, 128, 128]
   if (str == 'magenta') return [255, 0, 255]
+  // ok, not the real css `pink` but my personal `magenta` alias
+  // `pink` is simpler than `fuchsia`, whatever...
   if (str == 'pink')    return [255, 0, 255]
   if (str == 'yellow')  return [255, 255, 0]
 }
@@ -142,24 +153,21 @@ function hex6(str) {
   }
 }
 
-function num(val, integer) {
+function getnum(val, integer) {
+  if (typeof val != 'number') return -1
   if (integer === true && Math.floor(val) !== val) return -1
-  return typeof val == 'number' && val >= 0 && val <= 255
+  return val >= 0 && val <= 255
     ? val
     : -1
-}
-
-function has(obj, prop) {
-  return obj.hasOwnProperty(prop)
 }
 
 function object(obj) {
   if (Object.prototype.toString.call(obj) === '[object Object]'
     && Object.getPrototypeOf(obj) === Object.getPrototypeOf({})) {
-    var r = num(has(obj, 'r') ? obj.r : has(obj, 'red')   ? obj.red   : 0,   true)
-    var g = num(has(obj, 'g') ? obj.g : has(obj, 'green') ? obj.green : 0,   true)
-    var b = num(has(obj, 'b') ? obj.b : has(obj, 'blue')  ? obj.blue  : 0,   true)
-    var a = num(has(obj, 'a') ? obj.a : has(obj, 'alpha') ? obj.alpha : 255, true)
+    var r = getnum(obj.r != undefined ? obj.r : obj.red   != undefined ? obj.red   : 0,   true)
+    var g = getnum(obj.g != undefined ? obj.g : obj.green != undefined ? obj.green : 0,   true)
+    var b = getnum(obj.b != undefined ? obj.b : obj.blue  != undefined ? obj.blue  : 0,   true)
+    var a = getnum(obj.a != undefined ? obj.a : obj.alpha != undefined ? obj.alpha : 255, true)
     if (r != -1 && g != -1 && b != -1 && a != -1) {
       return [r, g, b, a]
     }
@@ -168,13 +176,23 @@ function object(obj) {
 
 function array(arr) {
   if (Array.isArray(arr) && (arr.length == 3 || arr.length == 4)) {
-    var r = num(arr[0] || 0,   true)
-    var g = num(arr[1] || 0,   true)
-    var b = num(arr[2] || 0,   true)
-    var a = num(arr[3] || 255, true)
+    var r = getnum(arr[0],   true)
+    var g = getnum(arr[1],   true)
+    var b = getnum(arr[2],   true)
+    var a = getnum(arr[3] != undefined ? arr[3] : 255, true)
     if (r != -1 && g != -1 && b != -1 && a != -1) {
       return [r, g, b, a]
     }
+  }
+}
+
+function number(num) {
+  if (typeof num == 'number' && Math.floor(num) == num && num <= 4294967295 && num >= 0) {
+    var a = num >> 24 & 255
+    var r = num >> 16 & 255
+    var g = num >> 8  & 255
+    var b = num & 255
+    return [r, g, b, a]
   }
 }
 
@@ -182,9 +200,9 @@ function rgb(str) {
   if (str.substr(0, 4) == 'rgb(') {
     str = str.match(/^rgb\(([^)]+)\)/)[1]
     var t = str.split(/ *, */).map(Number)
-    var r = num(t[0], true)
-    var g = num(t[1], true)
-    var b = num(t[2], true)
+    var r = getnum(t[0], true)
+    var g = getnum(t[1], true)
+    var b = getnum(t[2], true)
     if (r != -1 && g != -1 && b != -1) {
       return [r, g, b, 255]
     }
@@ -195,10 +213,10 @@ function rgba(str) {
   if (str.substr(0, 5) == 'rgba(') {
     str = str.match(/^rgba\(([^)]+)\)/)[1]
     var t = str.split(/ *, */).map(Number)
-    var r = num(t[0], true)
-    var g = num(t[1], true)
-    var b = num(t[2], true)
-    var a = num(t[3] * 255)
+    var r = getnum(t[0], true)
+    var g = getnum(t[1], true)
+    var b = getnum(t[2], true)
+    var a = getnum(t[3] * 255)
     if (r != -1 && g != -1 && b != -1 && a != -1) {
       return [r, g, b, a]
     }

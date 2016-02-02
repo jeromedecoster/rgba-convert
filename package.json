@@ -1,6 +1,6 @@
 {
   "name": "rgba-convert",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Convert rgba values from and to various format",
   "repository": "jeromedecoster/rgba-convert",
   "main": "index.js",
@@ -13,7 +13,9 @@
     "convert",
     "color",
     "hex",
-    "css"
+    "css",
+    "integer",
+    "num"
   ],
   "scripts": {
     "start": "onchange {index,test}.js -- npm test",
@@ -22,7 +24,7 @@
   "devDependencies": {
     "onchange": "^2.0.0",
     "tap-min": "^1.0.0",
-    "tape": "^4.2.2"
+    "tape": "^4.4.0"
   },
   "author": "jeromedecoster",
   "license": "MIT"
